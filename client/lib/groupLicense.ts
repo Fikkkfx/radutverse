@@ -2,8 +2,8 @@ import {
   LicenseSettings,
   getLicenseSettingsByType,
   toLicenseTerms,
-} from "@/lib/license/terms";
-import { determineLicenseTypeByGroup } from "@/lib/license/license-types";
+  determineLicenseTypeByGroup,
+} from "@/lib/license/settings";
 import { LicenseTerms } from "@story-protocol/core-sdk";
 
 export const GROUPS = {
