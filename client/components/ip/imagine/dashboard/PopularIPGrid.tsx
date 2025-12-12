@@ -5,7 +5,7 @@ import { SearchResultsGrid, ExpandedAssetModal } from "@/components/ip/search";
 import { CategoryBrowser } from "./CategoryBrowser";
 import { FeaturedCatalog } from "./FeaturedCatalog";
 import type { PopularItem, SearchResult } from "@/components/ip/remix/types";
-import { determineLicenseType } from "@/lib/license/license-types";
+import { determineLicenseType } from "@/lib/license/settings";
 
 interface PopularIPGridProps {
   onBack: () => void;
