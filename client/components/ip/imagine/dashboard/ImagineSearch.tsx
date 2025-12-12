@@ -4,7 +4,7 @@ import { Search, Loader } from "lucide-react";
 import { SearchResultsGrid, ExpandedAssetModal } from "@/components/ip/search";
 import type { SearchResult } from "@/components/ip/remix/types";
 
-interface CatalogBrowserProps {
+interface ImagineSearchProps {
   onRemixSelected?: (
     asset: SearchResult,
     remixType: "paid" | "free",
@@ -12,13 +12,11 @@ interface CatalogBrowserProps {
   onAssetExpanded?: (asset: SearchResult) => void;
 }
 
-const DEFAULT_CATALOG = "MUSHY";
-
-export const CatalogBrowser = ({
+export const ImagineSearch = ({
   onRemixSelected,
   onAssetExpanded,
-}: CatalogBrowserProps) => {
-  const [searchInput, setSearchInput] = useState(DEFAULT_CATALOG);
+}: ImagineSearchProps) => {
+  const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -59,7 +57,7 @@ export const CatalogBrowser = ({
     try {
       if (isIpName(searchInput)) {
         console.log(
-          "[CatalogBrowser] Detected .ip name, resolving:",
+          "[ImagineSearch] Detected .ip name, resolving:",
           searchInput,
         );
 
@@ -203,7 +201,6 @@ export const CatalogBrowser = ({
     [],
   );
 
-  // Fetch domains for all unique owners
   const uniqueOwners = useMemo(() => {
     const owners = new Set<string>();
     searchResults.forEach((asset) => {
@@ -328,11 +325,6 @@ export const CatalogBrowser = ({
     }));
   };
 
-  // Auto-search on mount with default catalog
-  useEffect(() => {
-    handleSearch();
-  }, []);
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -346,7 +338,7 @@ export const CatalogBrowser = ({
           <div className="relative flex gap-2 flex-1">
             <input
               type="text"
-              placeholder="Search catalogs..."
+              placeholder="Search image, video, audio..."
               value={searchInput}
               onChange={handleInputChange}
               onKeyDown={(e) => {
@@ -433,8 +425,9 @@ export const CatalogBrowser = ({
           </>
         ) : (
           <div className="flex flex-col items-center justify-center py-12">
-            <Loader className="h-8 w-8 text-[#FF4DA6] animate-spin mb-3" />
-            <p className="text-slate-300 text-sm">Loading catalog...</p>
+            <p className="text-slate-300 text-sm">
+              Enter a search term to get started
+            </p>
           </div>
         )}
       </div>
@@ -448,7 +441,7 @@ export const CatalogBrowser = ({
             onClose={() => setExpandedAsset(null)}
             onShowDetails={() => {}}
             onRemixSelected={async (remixType) => {
-              console.log("📤 CatalogBrowser onRemixSelected called:", {
+              console.log("📤 ImagineSearch onRemixSelected called:", {
                 remixType,
                 hasExpandedAsset: !!expandedAsset,
                 assetIpId: expandedAsset?.ipId,
