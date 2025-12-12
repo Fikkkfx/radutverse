@@ -8,7 +8,10 @@ import {
   isAiGeneratedGroup,
   canDirectRegister,
 } from "@/lib/groupLicense";
-import { getLicenseSettingsByType, toLicenseTerms } from "@/lib/license/terms";
+import {
+  getLicenseSettingsByType,
+  toLicenseTerms,
+} from "@/lib/license/settings";
 import {
   uploadFile,
   uploadJSON,
