@@ -151,7 +151,7 @@ export function getLicenseSettingsByType(
     case "commercial-use":
       return {
         pilType: "commercial_use",
-        aiLearning: false,
+        aiLearning: aiTrainingManual ?? false,
         licensePrice: mintingFee ?? 1,
         revShare: 0,
       };
@@ -172,6 +172,13 @@ export function toLicenseTerms(settings: LicenseSettings): LicenseTerms {
   const isCommercial = settings.pilType !== "non_commercial_social_remix";
   const allowDerivatives = settings.pilType !== "commercial_use";
 
+  // Create metadata URI with AI learning preference
+  // Format: ipfs://QmXXX or encoded as URI parameter
+  const metadataUri = JSON.stringify({
+    aiTrainingAllowed: settings.aiLearning,
+  });
+  const encodedUri = `data:application/json,${encodeURIComponent(metadataUri)}`;
+
   return {
     transferable: true,
     royaltyPolicy: isCommercial ? ROYALTY_POLICY_LAP : zeroAddress,
@@ -181,7 +188,7 @@ export function toLicenseTerms(settings: LicenseSettings): LicenseTerms {
     commercialAttribution: isCommercial,
     commercializerChecker: zeroAddress,
     commercializerCheckerData: "0x",
-    commercialRevShare: settings.revShare * 10 ** 6,
+    commercialRevShare: settings.revShare,
     commercialRevCeiling: 0n,
     derivativesAllowed: allowDerivatives,
     derivativesAttribution: allowDerivatives,
@@ -189,7 +196,7 @@ export function toLicenseTerms(settings: LicenseSettings): LicenseTerms {
     derivativesReciprocal: allowDerivatives,
     derivativeRevCeiling: 0n,
     currency: WIP_TOKEN_ADDRESS,
-    uri: "",
+    uri: encodedUri,
   };
 }
 
