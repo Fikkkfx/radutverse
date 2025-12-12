@@ -33,6 +33,8 @@ interface SmartLicensingFormProps {
     mintingFee: number;
     revShare: number;
     aiTraining: boolean;
+    title: string;
+    description: string;
   }) => void;
   registerState?: RegisterState;
 }
@@ -117,6 +119,11 @@ export const SmartLicensingForm: React.FC<SmartLicensingFormProps> = ({
   const [revShare, setRevShare] = useState<string>("");
   const [aiTraining, setAiTraining] = useState(!isAiGeneratedGroup(group));
   const [showLicenseOptions, setShowLicenseOptions] = useState(false);
+  const [editableTitle, setEditableTitle] = useState<string>(title);
+  const [editableDescription, setEditableDescription] =
+    useState<string>(description);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
 
   const selectedLicenseInfo = LICENSE_TYPES[selectedLicenseType];
 
@@ -144,6 +151,8 @@ export const SmartLicensingForm: React.FC<SmartLicensingFormProps> = ({
       mintingFee: mintingFee ? Number(mintingFee) : 0,
       revShare: revShare ? Number(revShare) : 0,
       aiTraining,
+      title: editableTitle,
+      description: editableDescription,
     });
   };
 
@@ -212,14 +221,73 @@ export const SmartLicensingForm: React.FC<SmartLicensingFormProps> = ({
     <div
       className={`bg-gradient-to-b from-slate-900/80 to-slate-950/60 rounded-2xl p-6 backdrop-blur-sm max-w-2xl transition-opacity ${isLoading ? "opacity-75" : ""}`}
     >
-      {/* Header */}
+      {/* Header with Editable Title and Description */}
       <div className="mb-6">
-        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">
+        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">
           🎯 Smart Licensing
         </h3>
-        <p className="text-sm font-bold text-white">{title}</p>
-        {description && (
-          <p className="text-xs text-slate-300 mt-2">{description}</p>
+
+        {/* Title Section */}
+        <div className="mb-3">
+          {editingTitle ? (
+            <input
+              type="text"
+              value={editableTitle}
+              onChange={(e) => setEditableTitle(e.target.value)}
+              onBlur={() => setEditingTitle(false)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") setEditingTitle(false);
+              }}
+              disabled={isLoading}
+              autoFocus
+              className="w-full px-3 py-2 bg-slate-900/60 rounded-lg text-white text-sm font-bold focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all"
+              placeholder="Enter IP title"
+            />
+          ) : (
+            <div className="flex items-start justify-between group">
+              <p className="text-sm font-bold text-white flex-1 break-words">
+                {editableTitle}
+              </p>
+              <button
+                onClick={() => setEditingTitle(true)}
+                disabled={isLoading}
+                className="ml-2 px-2 py-1 text-xs text-slate-400 hover:text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                ✏️
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Description Section */}
+        {editableDescription && (
+          <div>
+            {editingDescription ? (
+              <textarea
+                value={editableDescription}
+                onChange={(e) => setEditableDescription(e.target.value)}
+                onBlur={() => setEditingDescription(false)}
+                disabled={isLoading}
+                autoFocus
+                rows={2}
+                className="w-full px-3 py-2 bg-slate-900/60 rounded-lg text-white text-xs focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all resize-none"
+                placeholder="Enter IP description"
+              />
+            ) : (
+              <div className="flex items-start justify-between group">
+                <p className="text-xs text-slate-300 flex-1 break-words">
+                  {editableDescription}
+                </p>
+                <button
+                  onClick={() => setEditingDescription(true)}
+                  disabled={isLoading}
+                  className="ml-2 px-2 py-1 text-xs text-slate-400 hover:text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  ✏️
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
@@ -421,38 +489,58 @@ export const SmartLicensingForm: React.FC<SmartLicensingFormProps> = ({
         </div>
       )}
 
-      {/* AI Training Checkbox */}
-      <div className="mb-6">
-        <label
-          className={`flex items-center gap-3 p-3 bg-slate-800/20 rounded-lg transition-all ${
-            isLoading || isAiGeneratedGroup(group)
-              ? "opacity-50 cursor-not-allowed"
-              : "cursor-pointer hover:bg-slate-800/30"
-          }`}
-        >
-          <input
-            type="checkbox"
-            checked={aiTraining}
-            onChange={(e) => setAiTraining(e.target.checked)}
-            disabled={isLoading || isAiGeneratedGroup(group)}
-            className={`w-5 h-5 rounded border-slate-600 bg-slate-900/60 accent-pink-500 ${
+      {/* AI Training Checkbox - Only for license types that support it */}
+      {selectedLicenseType === "non-commercial-social-remixing" && (
+        <div className="mb-6 p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+          <p className="text-xs text-blue-200">
+            <span className="font-semibold">💡 Non-Commercial License:</span> AI
+            training is not applicable to non-commercial licenses since they
+            don't involve commercial derivatives.
+          </p>
+        </div>
+      )}
+
+      {(selectedLicenseType === "commercial-use" ||
+        selectedLicenseType === "commercial-remix") && (
+        <div className="mb-6">
+          <label
+            className={`flex items-center gap-3 p-3 bg-slate-800/20 rounded-lg transition-all ${
               isLoading || isAiGeneratedGroup(group)
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer hover:bg-slate-800/30"
             }`}
-          />
-          <div className="flex-1">
-            <span className="text-xs font-semibold text-slate-200">
-              Allow AI Training
-            </span>
-            {isAiGeneratedGroup(group) && (
-              <p className="text-xs text-slate-400 mt-1">
-                Disabled for AI-generated content to protect creator rights
-              </p>
-            )}
-          </div>
-        </label>
-      </div>
+          >
+            <input
+              type="checkbox"
+              checked={aiTraining}
+              onChange={(e) => setAiTraining(e.target.checked)}
+              disabled={isLoading || isAiGeneratedGroup(group)}
+              className={`w-5 h-5 rounded border-slate-600 bg-slate-900/60 accent-pink-500 ${
+                isLoading || isAiGeneratedGroup(group)
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
+            />
+            <div className="flex-1">
+              <span className="text-xs font-semibold text-slate-200">
+                Allow AI Training
+              </span>
+              {isAiGeneratedGroup(group) && (
+                <p className="text-xs text-slate-400 mt-1">
+                  Disabled for AI-generated content to protect creator rights
+                </p>
+              )}
+              {!isAiGeneratedGroup(group) && (
+                <p className="text-xs text-slate-400 mt-1">
+                  {selectedLicenseType === "commercial-remix"
+                    ? "Allow AI models to be trained on this IP"
+                    : "Allow AI models to be trained on derivative uses"}
+                </p>
+              )}
+            </div>
+          </label>
+        </div>
+      )}
 
       {/* Loading Progress */}
       {isLoading && (
