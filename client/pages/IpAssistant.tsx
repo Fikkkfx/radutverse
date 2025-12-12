@@ -2084,8 +2084,8 @@ const IpAssistant = () => {
                         config.revShare,
                         config.aiTraining,
                         {
-                          title: licensingMsg.title,
-                          prompt: licensingMsg.description,
+                          title: config.title,
+                          prompt: config.description,
                         },
                         ethProvider,
                         config.licenseType,
