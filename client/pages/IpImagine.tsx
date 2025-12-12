@@ -18,7 +18,7 @@ import {
   AddRemixImageModal,
   type PreviewImagesState,
 } from "@/components/ip/remix";
-import { CatalogBrowser } from "@/components/ip/imagine/dashboard/CatalogBrowser";
+import { ImagineSearch } from "@/components/ip/imagine/dashboard/ImagineSearch";
 import useGeminiGenerator from "@/hooks/useGeminiGenerator";
 import { useIpImagineTour } from "@/hooks/useIpImagineTour";
 import { truncateAddress } from "@/lib/ip-assistant/utils";
@@ -411,8 +411,8 @@ const IpImagine = () => {
         <div className="relative w-full h-full flex flex-col">
           <div className="chat-box px-3 sm:px-4 md:px-12 pt-4 pb-48 overflow-y-auto bg-transparent scroll-smooth flex-1">
             <AnimatePresence initial={false} mode="popLayout">
-              <CatalogBrowser
-                key="catalog-browser"
+              <ImagineSearch
+                key="imagine-search"
                 onRemixSelected={handleRemixSelected}
                 onAssetExpanded={setExpandedAsset}
               />
