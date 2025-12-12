@@ -4,7 +4,7 @@ import {
   determineLicenseTypeByGroup,
   LICENSE_TYPES,
   determineLicenseType,
-} from "@/lib/license/license-types";
+} from "@/lib/license/settings";
 import { isAiGeneratedGroup } from "@/lib/groupLicense";
 
 export type RegisterState = {
