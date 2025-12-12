@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { ChevronDown, Check, Loader2, ExternalLink } from "lucide-react";
 import {
   determineLicenseTypeByGroup,
@@ -127,6 +127,16 @@ export const SmartLicensingForm: React.FC<SmartLicensingFormProps> = ({
       ...value,
     }),
   );
+
+  // Clear fee/revshare values when switching to license types that don't support them
+  useEffect(() => {
+    if (selectedLicenseType === "non-commercial-social-remixing") {
+      setMintingFee("");
+      setRevShare("");
+    } else if (selectedLicenseType === "commercial-use") {
+      setRevShare("");
+    }
+  }, [selectedLicenseType]);
 
   const handleRegister = () => {
     onRegister({
@@ -316,49 +326,100 @@ export const SmartLicensingForm: React.FC<SmartLicensingFormProps> = ({
         </div>
       )}
 
-      {/* Form Inputs */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        {/* Minting Fee */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-            Minting Fee (IP tokens)
-          </label>
-          <input
-            type="number"
-            min="0"
-            step="0.1"
-            value={mintingFee}
-            onChange={(e) => setMintingFee(e.target.value)}
-            disabled={isLoading}
-            placeholder="0"
-            className={`w-full px-3 py-2 bg-slate-900/60 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          />
-          <p className="text-xs text-slate-500 mt-1">Leave empty for free</p>
-        </div>
+      {/* Form Inputs - Only shown for license types that support them */}
+      {selectedLicenseType === "commercial-remix" && (
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {/* Minting Fee */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Minting Fee (IP tokens)
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={mintingFee}
+              onChange={(e) => setMintingFee(e.target.value)}
+              disabled={isLoading}
+              placeholder="0"
+              className={`w-full px-3 py-2 bg-slate-900/60 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            />
+            <p className="text-xs text-slate-500 mt-1">Leave empty for free</p>
+          </div>
 
-        {/* Revenue Share */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-            Revenue Share (%)
-          </label>
-          <input
-            type="number"
-            min="0"
-            max="100"
-            step="1"
-            value={revShare}
-            onChange={(e) => setRevShare(e.target.value)}
-            disabled={isLoading}
-            placeholder="0"
-            className={`w-full px-3 py-2 bg-slate-900/60 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          />
-          <p className="text-xs text-slate-500 mt-1">% of derivative revenue</p>
+          {/* Revenue Share */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Revenue Share (%)
+            </label>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              value={revShare}
+              onChange={(e) => setRevShare(e.target.value)}
+              disabled={isLoading}
+              placeholder="0"
+              className={`w-full px-3 py-2 bg-slate-900/60 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            />
+            <p className="text-xs text-slate-500 mt-1">
+              % of derivative revenue
+            </p>
+          </div>
         </div>
-      </div>
+      )}
+
+      {selectedLicenseType === "commercial-use" && (
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {/* Minting Fee */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Minting Fee (IP tokens)
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={mintingFee}
+              onChange={(e) => setMintingFee(e.target.value)}
+              disabled={isLoading}
+              placeholder="0"
+              className={`w-full px-3 py-2 bg-slate-900/60 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            />
+            <p className="text-xs text-slate-500 mt-1">Leave empty for free</p>
+          </div>
+
+          {/* Revenue Share - Not applicable for commercial-use */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Revenue Share (%)
+            </label>
+            <div className="w-full px-3 py-2 bg-slate-800/40 rounded-lg text-slate-400 opacity-60 border border-slate-700/30">
+              <p className="text-xs">Not applicable</p>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              Derivatives not allowed in this license type
+            </p>
+          </div>
+        </div>
+      )}
+
+      {selectedLicenseType === "non-commercial-social-remixing" && (
+        <div className="mb-6 p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+          <p className="text-xs text-blue-200">
+            <span className="font-semibold">💡 Non-Commercial License:</span>{" "}
+            This license type does not support minting fees or revenue sharing.
+            Users can remix and share your work freely without commercial use.
+          </p>
+        </div>
+      )}
 
       {/* AI Training Checkbox */}
       <div className="mb-6">
