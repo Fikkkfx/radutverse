@@ -1,507 +1,435 @@
 # RadutVerse
 
-A production-ready full-stack platform for managing, visualizing, and monetizing tokenized intellectual property (IP) on the blockchain. Built with React, Express, Story Protocol, and OpenAI.
-
-## Overview
-
-RadutVerse is an all-in-one portal for IP ownership and monetization on Web3. It lets users register their creations as on-chain IP, connect a wallet, explore portfolios, and trade IP-backed NFTs — all from one clean interface. The platform integrates Story Protocol, OpenAI, and Pinata IPFS to make IP management smarter and more transparent.
-
-**Core Capabilities:**
-
-- **Create & Generate**: Generate AI-powered IP assets with IP Imagine
-- **Manage & Register**: Register creations as on-chain IP using Story Protocol
-- **Discover & Trade**: Explore and trade IP-backed NFTs in the marketplace
-- **Analyze & Optimize**: Get AI insights about IP licensing and value
-- **Track & Monitor**: View portfolio and chat history of all activities
-
-## Key Features
-
-### Core Capabilities
-
-- **IP Imagine**: AI-powered image generation with watermarking and Web3 integration
-- **IP Fi Assistant**: AI chatbot for IP licensing insights and financial analysis
-- **IP Assistant**: Unified AI assistant for asset management and discovery
-- **Portfolio Management**: Track owned IP assets, balances, and metadata
-- **NFT Marketplace**: Browse and trade tokenized IP assets
-- **Smart Search**: Find IP assets by owner, content, or metadata
-- **Chat History**: Review and manage past assistant conversations
-- **Wallet Integration**: EVM-compatible wallet support (MetaMask, Privy)
-- **Settings & Customization**: Manage account integrations and preferences
-
-### Web3 Integration
-
-- Story Protocol SDK for on-chain IP registration and licensing
-- Viem for blockchain interactions
-- Privy for wallet authentication
-- Support for remixable assets and licensing terms
-- Derivative IP tracking and parent-child relationships
-
-### AI & Content Tools
-
-- OpenAI Vision API for image analysis and detection
-- DALL-E 3 for AI image generation
-- Watermarking system for content protection
-- Similarity detection for remixable content validation
-- Automatic descriptions and metadata generation
-
-### Storage & Infrastructure
-
-- Pinata IPFS for decentralized asset storage
-- Vercel Blob for fast asset delivery
-- Supabase for user data and authentication
-- Server-side image processing with Sharp
-
-## Tech Stack
-
-**Frontend:**
-
-- React 18.3 + React Router 6 (SPA mode)
-- TypeScript 5.9
-- Vite 7.1 (bundler & dev server)
-- TailwindCSS 3.4 + custom theme
-- Radix UI component library
-- Framer Motion for animations
-- React Query v5 for server state
-- React Hook Form for forms
-- Lucide React icons
-
-**Backend:**
-
-- Node.js with Express 5.1
-- TypeScript support
-- Multer for file uploads
-- CORS handling for multiple origins
-
-**Web3 & Blockchain:**
-
-- Story Protocol Core SDK v1.4
-- Viem v2.38 for Ethereum interactions
-- Privy v1.99 for wallet auth
-- EVM chain support (Story Network, mainnet)
-
-**AI & APIs:**
-
-- OpenAI API (Vision, GPT-4o, DALL-E 3)
-- Story Protocol APIs for asset metadata
-- Pinata IPFS gateway
-- Vercel Blob for CDN
-
-**Storage:**
-
-- Supabase PostgreSQL
-- Pinata IPFS (decentralized)
-- Vercel Blob (edge-optimized)
-- In-memory remix hash whitelist
-
-**Dev & Tooling:**
-
-- Vitest for unit/integration tests
-- TypeScript compiler for type checking
-- Prettier for code formatting
-- SWC for fast transpilation
-- Zod for schema validation
-
-## Project Structure
-
-```
-client/                    # React SPA frontend
-├── pages/                 # Route components (pages)
-│   ├── Index.tsx          # Home / landing
-│   ├── IpfiAssistant.tsx  # IP Fi Assistant (chat)
-│   ├── IpImagine.tsx      # Image generation tool
-│   ├── IpImagineCreationResult.tsx
-│   ├── MyPortfolio.tsx    # User's IP portfolio
-│   ├── NftMarketplace.tsx # NFT marketplace
-│   ├── Settings.tsx       # Account settings
-│   ├── History.tsx        # Chat history
-│   └── NotFound.tsx       # 404 page
-├── components/
-│   ├── ui/               # Pre-built Radix UI components
-│   ├── layout/           # DashboardLayout, navigation
-│   ├── ip/               # IP-specific components
-│   ├── portfolio/        # Portfolio display components
-│   ├── common/           # Shared utilities
-│   └── ...
-├── hooks/                # Custom React hooks
-├── services/             # API clients
-├── lib/                  # Utilities and helpers
-│   ├── ip-assistant/    # AI assistant logic
-│   ├── license/         # Licensing utilities
-│   ├── utils/           # Image processing, crypto, etc.
-│   └── network-config.ts
-├── context/             # React Context providers
-├── types/               # TypeScript definitions
-├── config/              # Navigation & app config
-├── global.css           # TailwindCSS + theme
-├── App.tsx              # App entry & routes
-└── vite-env.d.ts
-
-server/                    # Express backend
-├── routes/               # API endpoint handlers (23+ routes)
-│   ├── generate-image.ts
-│   ├── analyze-image-vision.ts
-│   ├── check-ip-assets.ts
-│   ├── search-ip-assets.ts
-│   ├── wallet-creations.ts
-│   └── ... (20+ more)
-├── utils/                # Server-side helpers
-├── data/                 # Static data (remix hashes)
-├── index.ts              # Express setup & CORS
-└── node-build.ts         # Production entrypoint
-
-shared/                    # Shared between client & server
-├── api.ts               # Shared type interfaces
-└── ...
-
-public/                   # Static assets
-├── robots.txt
-└── ...
-
-netlify/functions/        # Netlify serverless
-api/                      # Vercel serverless entry
-vercel.json               # Vercel config
-netlify.toml              # Netlify config
-tailwind.config.ts        # TailwindCSS config
-tsconfig.json             # TypeScript config
-vite.config.ts            # Frontend build config
-vite.config.server.ts     # Backend build config
-```
-
-## Routes & Pages
-
-| Route                | Component                     | Purpose                              |
-| -------------------- | ----------------------------- | ------------------------------------ |
-| `/`                  | `Index.tsx`                   | Home/landing page                    |
-| `/ipfi-assistant`    | `IpfiAssistant.tsx`           | AI chat for IP financing & licensing |
-| `/ip-imagine`        | `IpImagine.tsx`               | AI image generation tool             |
-| `/ip-imagine/result` | `IpImagineCreationResult.tsx` | View generated assets                |
-| `/nft-marketplace`   | `NftMarketplace.tsx`          | Browse & trade IP NFTs               |
-| `/my-portfolio`      | `MyPortfolio.tsx`             | User's IP portfolio                  |
-| `/settings`          | `Settings.tsx`                | Account & integration settings       |
-| `/history`           | `History.tsx`                 | Chat history & logs                  |
-| `/*`                 | `NotFound.tsx`                | 404 fallback                         |
-
-## 🔌 API Endpoints
-
-### Asset Management
-
-```
-POST /api/check-ip-assets
-  { "address": "0x..." }
-  Returns: IP assets owned by address
-
-POST /api/get-asset-by-id
-  { "ipId": "string" }
-  Returns: Asset metadata and details
-
-POST /api/search-ip-assets
-  { "query": "string", "limit": 50, "offset": 0 }
-  Returns: Search results with pagination
-
-POST /api/search-by-owner
-  { "owner": "0x...", "limit": 50, "offset": 0 }
-  Returns: Assets owned by address
-```
-
-### Image & Vision
-
-```
-POST /api/generate-image
-  { "prompt": "string", "mode": "demo|production" }
-  Returns: Generated image URL
-
-POST /api/analyze-image-vision
-  { "imageUrl": "string", "address": "0x..." }
-  Returns: Vision analysis results
-
-POST /api/vision-image-detection
-  (multipart: image file)
-  Returns: Image detection results
-
-POST /api/check-image-similarity
-  (multipart: image file)
-  Returns: Similarity analysis
-```
-
-### AI Assistance
-
-```
-POST /api/describe
-  { "imageUrl": "string" }
-  Returns: AI-generated description
-
-POST /api/get-suggestions
-  { "query": "string", "context": "..." }
-  Returns: Typing suggestions & completions
-
-POST /api/parse-search-intent
-  { "query": "string" }
-  Returns: Parsed search intent
-```
-
-### Storage & Upload
-
-```
-POST /api/upload
-  (multipart: file)
-  Returns: Uploaded file metadata
-
-POST /api/ipfs/upload
-  (multipart: file)
-  Returns: IPFS hash & metadata
-
-POST /api/ipfs/upload-json
-  { "data": {...} }
-  Returns: IPFS hash for JSON
-```
-
-### Wallet & Creation Management
-
-```
-GET /api/wallet-creations/:walletAddress
-  Returns: Creations by wallet
-
-POST /api/wallet-creations
-  { "walletAddress": "0x...", "data": {...} }
-  Returns: Created asset metadata
-
-POST /api/wallet-creations/:id
-  { "data": {...} }
-  Updates: Existing creation
-
-DELETE /api/wallet-creations/:id
-  Deletes: Specified creation
-```
-
-### Remix & Licensing
-
-```
-POST /api/add-remix-hash
-  { "hash": "string", "ipId": "string" }
-  Registers remixable asset
-
-POST /api/check-remix-hash
-  { "hash": "string" }
-  Verifies remixable status
-
-POST /api/resolve-ip-name
-  { "name": "string" }
-  Resolves IP name to ID
-
-POST /api/resolve-owner-domain
-  { "domain": "string" }
-  Resolves owner domain
-```
-
-## Getting Started
+Generate, register, and manage IP on the blockchain.
+
+RadutVerse is a Web3 platform for creating and registering intellectual property on-chain. Generate AI images, register them as NFTs on Story Protocol, and manage your IP portfolio all in one place.
+
+---
+
+## What Works Right Now
+
+### Pages Live and Functional
+- Home at the root path — Landing page
+- IP Assistant at /ip-assistant — Register IP with analysis and smart licensing, search and explore IP assets
+- IP Imagine at /ip-imagine — Generate and remix existing IP, with text prompts
+- IP Imagine Results at /ip-imagine/result — View and register your generated images
+- My Portfolio at /my-portfolio — View your registered IP assets
+- History at /history — Chat and creation history
+- Settings at /settings — Account and integration settings
+
+### Pages Coming Soon
+- IPFi Assistant — Financial insights for IP licensing
+- NFT Marketplace — Browse and trade IP-backed NFTs
+
+### Core Features
+1. Generate Images — Text-to-image using DALL-E 3 in IP Imagine (demo mode works without API keys)
+2. Auto-Watermark — Generated images get a visible lock emoji for protection
+3. Smart Licensing — Choose from 3 license types with automatic IP protection
+4. Remix IP — Create derivatives with text prompts in IP Imagine and set royalty sharing
+5. Image Analysis — Vision AI analyzes creations before registration in IP Assistant
+6. Register on Story Protocol — Mint as on-chain IP with licensing terms via IP Assistant
+7. Asset Search — Find IP by title, description, or creator in IP Assistant with detailed asset views
+8. Portfolio Tracking — View registered assets and derivatives in My Portfolio
+
+---
+
+## Quick Start
 
 ### Prerequisites
-
-- **Node.js** v18+ with **pnpm** v10.14+
-- **Git**
-- **EVM Wallet** (MetaMask, etc.)
-- **API Keys**: Story Protocol, OpenAI, Pinata
+- Node.js 18 or newer with pnpm 10.14 or newer
+- EVM Wallet like MetaMask or Privy
 
 ### Installation
 
 ```bash
-# Clone repository
-git clone <your-repo-url>
+# Clone and install
+git clone <repo>
 cd radutverse
-
-# Install dependencies
 pnpm install
 
-# Create .env.local file (see Environment Variables section)
-# Copy the example below and fill in your keys
+# Create .env.local (see the section below)
 ```
 
-### Environment Variables
+### Run Development Server
 
-Create a `.env.local` file in the project root:
+```bash
+pnpm dev
+```
 
-```env
-# Blockchain & Web3
-VITE_PUBLIC_STORY_RPC=https://mainnet.storyrpc.io
-VITE_PUBLIC_SPG_COLLECTION=0x9529f4519B0F0f9f0db044eb697A173C378Bebb3
-VITE_GUEST_PRIVATE_KEY=your_test_private_key
-STORY_API_KEY=your_story_protocol_api_key
+Opens at http://localhost:5173 with hot reload.
 
-# Authentication
+### Important Mainnet Notice
+
+This application is configured to run on Story Protocol mainnet for full functionality. Testnet has limitations that make testing and comparing IP registration features difficult. On mainnet, you can register IP, test all license types, and monitor everything through Story Protocol's official tools.
+
+Transaction costs are minimal. Hundreds of transactions will not consume even 0.1 dollars worth of IP tokens. For safety, use a new wallet dedicated to testing rather than your primary wallet.
+
+### Try It Out Demo Mode
+No API keys required to try:
+1. Go to IP Imagine
+2. Type a prompt and click generate
+3. Watch the demo image appear with a lock emoji watermark
+4. Click Register to see the registration flow requires keys to actually submit
+
+---
+
+## Smart Licensing
+
+RadutVerse uses Story Protocol to enforce licensing on-chain. When you register your IP, you choose a license that automatically protects your work and enables remix revenue sharing.
+
+### 3 License Types
+
+Non-Commercial Social Remix works best for art and hobby projects. Remixing is free, commercial use is not allowed, AI training is disabled, and no revenue share applies.
+
+Commercial Use is for professional work and products. Remixing is restricted, commercial use is allowed, AI training can be configured, and no revenue share applies.
+
+Commercial Remix is for collaborative work and IP trading. Remixing is paid, commercial use is allowed, AI training is disabled, and you can set a revenue share from 0 to 50 percent.
+
+### How It Works
+
+When you register your IP:
+
+1. Choose License Type — System recommends based on content (AI-generated, human-made, etc.)
+2. Set Minting Fee (optional) — One-time fee when someone remixes your IP (0-1000 units)
+3. Set Revenue Share (optional) — Royalty percentage for derivatives (0-50%)
+4. License Stored On-Chain — Story Protocol enforces automatically
+
+### Example
+
+You register: Digital Landscape
+Selected: Commercial Remix license
+- Minting Fee: 100 units (paid by remixer)
+- Revenue Share: 20 percent (you get 20 percent of remixer's earnings)
+
+Creator A remixes your image
+- Pays 100 unit minting fee → You receive this
+- Creates derivative and earns money
+- You earn 20 percent of their revenue automatically
+
+Creator B remixes Creator A's work
+- Pays another fee
+- You still earn your 20 percent from the derivative chain
+
+### AI Training Control
+
+Non-Commercial always has AI training disabled.
+Commercial Use has no AI training allowed.
+Commercial Remix has AI training disabled.
+
+Your images won't be used to train commercial AI models unless you explicitly enable it.
+
+---
+
+## Environment Variables
+
+### Minimal Setup Demo Only
+
+Optional key that enables wallet login but the app still works without it:
 VITE_PRIVY_APP_ID=your_privy_app_id
 
-# AI Services
-OPENAI_API_KEY=your_openai_api_key
-OPENAI_VERIFIER_MODEL=gpt-4o
+No other keys needed for demo mode. Just pnpm dev and try the app!
 
-# Storage
-PINATA_JWT=your_pinata_jwt_token
-PINATA_GATEWAY=your_pinata_gateway_url
+### Full Setup Production
 
-# Database
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+AI and Image Generation:
+OPENAI_API_KEY=sk-...  Required for real image generation and analysis
+OPENAI_VERIFIER_MODEL=gpt-4o  Optional model override (defaults provided)
+OPENAI_PRIMARY_MODEL=gpt-4o-mini  Optional model override (defaults provided)
 
-### Development
+Story Protocol (Blockchain IP):
+STORY_API_KEY=your_story_api_key  Required for IP asset search
+VITE_PUBLIC_STORY_RPC=https://mainnet.storyrpc.io  Required for registration
+VITE_PUBLIC_SPG_COLLECTION_USERS=0x98971...  SPG contract address
+
+Authentication:
+VITE_PRIVY_APP_ID=your_privy_app_id  Optional (app works without it)
+VITE_GUEST_PRIVATE_KEY=your_guest_key  Optional demo private key
+
+Database (Persistent Storage):
+VITE_SUPABASE_URL=https://project.supabase.co  Required for saved creations
+VITE_SUPABASE_ANON_KEY=eyJhbGc...  Required for saved creations
+
+IPFS (Decentralized Storage):
+PINATA_JWT=eyJhbGc...  Optional (custom IPFS gateway)
+PINATA_GATEWAY=your.mypinata.cloud  Optional (custom IPFS gateway)
+
+Deployment and Server:
+PORT=8080  Optional (default: 3000)
+NODE_ENV=development  development or production
+
+### Which Keys Do I Actually Need
+
+For Demo (generates dummy images):
+None required
+
+For Real Generation:
+OPENAI_API_KEY — Must have this to generate real images
+
+For Story Protocol Features (search assets, register IP):
+STORY_API_KEY — Search and view IP assets
+VITE_PUBLIC_STORY_RPC — Blockchain RPC endpoint
+VITE_PUBLIC_SPG_COLLECTION_USERS — Contract address for minting
+
+For Saving Your Work (persistent storage):
+VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY — Save creations to database
+
+For Wallet Login:
+VITE_PRIVY_APP_ID — Enable Privy wallet authentication (optional)
+
+For IPFS/Pinata (optional):
+PINATA_JWT and PINATA_GATEWAY — Use Pinata IPFS gateway (fallback to ipfs.io)
+
+---
+
+## API Endpoints 27 Working
+
+### Image Generation (3)
+POST /api/generate-image — Generate from text prompt
+POST /api/generate-with-watermark — Generate with watermark
+POST /api/edit — Edit existing image
+
+### Image Analysis (3)
+POST /api/analyze-image-vision — Analyze content before registration
+POST /api/vision-image-detection — Detect image type (AI, photo, etc)
+POST /api/check-image-similarity — Find similar registered IP
+
+### Asset Search (4)
+POST /api/search-ip-assets — Search all IP assets
+POST /api/search-by-owner — Search by creator address
+POST /api/get-asset-by-id — Get asset details
+POST /api/check-ip-assets — Get user's registered assets
+
+### Creation Management (4)
+GET /api/wallet-creations/:walletAddress — List user's creations
+POST /api/wallet-creations — Save new creation
+POST /api/wallet-creations/:id — Update creation
+DELETE /api/wallet-creations/:id — Delete creation
+
+### Storage and Upload (3)
+POST /api/ipfs/upload — Upload file to IPFS
+POST /api/ipfs/upload-json — Upload JSON metadata to IPFS
+POST /api/upload — Upload to Vercel Blob
+
+### Utilities (7)
+POST /api/describe — Get AI description of image
+POST /api/resolve-ip-name — Look up IP by name
+POST /api/resolve-owner-domain — Look up owner domain
+POST /api/parse-search-intent — Parse search query intent
+POST /api/get-suggestions — Get typing suggestions
+POST /api/capture-asset-vision — Analyze asset on click
+GET /api/ping — Health check
+
+---
+
+## How to Use
+
+### Generate Images with AI
+
+1. Go to IP Imagine
+2. Type a prompt like A digital landscape with mountains and aurora
+3. Click Generate
+4. Watch your image appear with a lock emoji watermark for protection
+5. Your generated image is now ready to use
+
+### Register IP with Analysis and Smart Licensing
+
+1. Go to IP Assistant
+2. Upload your image (generated or created elsewhere)
+3. Type Register to trigger AI analysis
+4. Vision AI analyzes:
+   - Image type (AI-generated, human-made, photo, etc.)
+   - Content safety and licensing recommendations
+   - Asset classification
+5. Choose your license type:
+   - Non-Commercial Social Remix (free to remix, no commercial use)
+   - Commercial Use (restricted remix, commercial allowed)
+   - Commercial Remix (paid remix, commercial allowed, with royalties)
+6. Optional: Set minting fee and revenue share percentage (0-50%)
+7. Connect wallet and confirm transaction
+8. IP registered on-chain with enforced licensing
+
+### Remix Existing IP
+
+1. Go to IP Imagine
+2. Use the search feature to find IP assets by title, description, or creator
+3. Find an IP you want to remix
+4. Click Remix to create a derivative
+5. Edit the image with your own prompt or modifications
+6. Generate the new image with your changes
+7. Choose to register as a derivative (via IP Assistant)
+8. Story Protocol automatically tracks:
+   - Parent-child relationship
+   - Royalty distribution
+   - Creator attribution
+9. Original creator earns royalties automatically from your derivative sales
+
+### Search and Explore IP Assets
+
+1. Go to IP Assistant
+2. Search for IP by:
+   - Creator address or name
+   - Title or description
+   - Any keywords related to content
+3. View detailed information about each asset:
+   - Licensing terms
+   - Creator information
+   - Remix history
+   - Derivative tracking
+4. Connect wallet to register your own IP with analysis
+
+### View Your Portfolio
+
+1. Go to My Portfolio
+2. Connect wallet
+3. View all your registered IP assets
+4. See licensing terms and metadata
+5. Track derivatives created from your work
+
+---
+
+## Architecture
+
+### Frontend
+- Framework: React 18 plus React Router 6 (SPA)
+- Language: TypeScript
+- Styling: TailwindCSS 3 plus Radix UI
+- State: React Context plus React Query
+- Build: Vite 7
+
+### Backend
+- Framework: Express 5
+- Language: TypeScript
+- Port: 3000 (dev) or PORT env var (prod)
+- APIs: 27 endpoints
+- Integration: Single-port with Vite dev server
+
+### Storage Layers
+- Session: Browser sessionStorage (chat history, temporary images)
+- Local: localStorage (creation cache)
+- Database: Supabase PostgreSQL (persistent creations, metadata)
+- Files: IPFS via Pinata (immutable asset storage)
+- CDN: Vercel Blob (fast image delivery)
+
+### Blockchain
+- Story Protocol: IP registration, licensing, derivatives
+- Network: Story Network (testnet/mainnet)
+- Wallet Auth: Privy (optional) or custom wallet via Viem
+
+---
+
+## Development Commands
 
 ```bash
-# Start dev server (frontend + backend on :5173)
-pnpm dev
-
-# Type checking
-pnpm typecheck
-
-# Run tests
-pnpm test
-
-# Format code
-pnpm format.fix
+pnpm dev              # Start dev server (frontend and backend)
+pnpm build            # Build for production
+pnpm start            # Run production server
+pnpm typecheck        # TypeScript type checking
+pnpm test             # Run tests with Vitest
+pnpm format.fix       # Format code with Prettier
 ```
 
-## Building & Deployment
+---
 
-### Development Build
+## Deployment
+
+### Vercel Recommended
 
 ```bash
-pnpm dev
+vercel
 ```
+Add environment variables in Vercel dashboard. Auto-deploys on git push.
 
-Opens at `http://localhost:5173` with hot reload enabled.
-
-### Production Build
+### Netlify
 
 ```bash
-# Build client + server
-pnpm build
-
-# Build outputs:
-# - dist/spa/          # Frontend (optimized SPA)
-# - dist/server/       # Backend (ESM modules)
+# Set build: pnpm build
+# Publish: dist/spa
+netlify deploy
 ```
 
-### Deployment Options
-
-#### Option 1: Vercel (Recommended)
-
-1. Connect GitHub repo to Vercel
-2. Add environment variables in Vercel dashboard
-3. Deploy: `vercel` (or push to deploy automatically)
-
-#### Option 2: Netlify
-
-1. Connect GitHub repo
-2. Set build command: `pnpm build`
-3. Set publish directory: `dist/spa`
-4. Add environment variables
-5. Deploy
-
-#### Option 3: Self-Hosted / Docker
+### Self-Hosted
 
 ```bash
-# Build
-pnpm build
-
-# Start production server
-pnpm start
-
-# Runs on :8080 by default
+pnpm build && pnpm start
+# Runs on PORT (default 8080)
 ```
 
-Requires Node.js v18+ at runtime.
-
-#### Option 4: Binary (pkg)
+### Docker
 
 ```bash
-# Package as standalone executable
-npm run build
-npx pkg dist/server/node-build.mjs --targets node18-linux-x64
-
-# Creates binary: node-build (no Node.js required)
+docker build -t radutverse .
+docker run -p 8080:8080 -e OPENAI_API_KEY=... radutverse
 ```
 
-See `DEPLOYMENT_GUIDE.md` for detailed deployment instructions.
+---
 
-## Testing & Quality
+## Security Notes
 
-```bash
-# Run all tests
-pnpm test
+Good Practices:
+- API keys stored server-side only (never exposed to frontend)
+- CORS configured for trusted origins
+- Input validated with Zod schemas
+- Wallet signatures verified before state changes
+- XSS protection via React's escaping
 
-# Type checking
-pnpm typecheck
+What You Should Do:
+1. Never commit .env.local to version control
+2. Keep API keys secret (rotate them regularly)
+3. Validate wallet addresses before transactions
+4. Monitor API logs for suspicious activity
+5. Keep dependencies updated: pnpm update
 
-# Code formatting
-pnpm format.fix
+---
 
-# Full pre-commit check
-pnpm typecheck && pnpm format.fix && pnpm test
-```
+## Frequently Asked Questions
 
-## Security Practices
+Can I use this without API keys?
+Yes. Demo mode works without any keys. You'll see placeholder images, but the UI functions perfectly. Set keys to use real image generation and blockchain features.
 
-- ✅ All API keys kept in backend/environment only
-- ✅ CORS configured for trusted origins
-- ✅ Input validation with Zod schemas
-- ✅ Content Security Headers enabled
-- ✅ XSS protection via React escaping
-- ✅ CSRF tokens for state-changing operations
-- ✅ Wallet signature verification for authentication
-- ✅ Rate limiting on API endpoints (production)
-- ⚠️ **Never commit** `.env.local` or secrets
-- ⚠️ **Validate all** wallet addresses before transactions
+Do I need a wallet?
+Only to register IP on-chain. You can generate images and use the app without a wallet (in demo mode).
 
-### Best Practices
+What blockchain does this use?
+Story Protocol on Story Network (testnet or mainnet). Requires VITE_PUBLIC_STORY_RPC and VITE_PUBLIC_SPG_COLLECTION_USERS.
 
-1. Use environment variables for all secrets
-2. Validate inputs on both client & server
-3. Verify wallet signatures before state changes
-4. Log security events (wallet connects, transactions)
-5. Monitor API error logs for anomalies
-6. Keep dependencies updated: `pnpm update`
+How does licensing work?
+When you register IP, you choose a license type (Non-Commercial Social Remix, Commercial Use, or Commercial Remix). Story Protocol enforces it automatically. Commercial Remix lets you set minting fees and revenue share (0-50 percent) for remixes.
 
-## Documentation
+Can I change my license after registering?
+No. License terms are immutable on-chain. Choose carefully before registering.
 
-- **Setup & Deployment**: See `DEPLOYMENT_GUIDE.md`
-- **Architecture Notes**: See `AGENTS.md`
-- **API Details**: Check `server/routes/` for handler documentation
+How do royalties work?
+If you set revenue share (for example, 20 percent), you automatically earn that percentage whenever someone creates a licensed remix of your IP. Story Protocol handles transfers directly to your wallet.
 
-## Contributing
+Can someone remix my IP without permission?
+Only if your license allows remixing. Non-Commercial and Commercial Remix allow it. Commercial Use restricts remixing. Story Protocol enforces these rules automatically.
 
-1. Create a feature branch: `git checkout -b feature/your-feature`
-2. Make changes and test locally
-3. Run checks: `pnpm typecheck && pnpm format.fix`
-4. Commit: `git commit -m "feat: add your feature"`
-5. Push and create a Pull Request
+Where are my images stored?
+Generated images are stored as data URLs in your browser until you register them. Once registered, they go to IPFS (via Pinata) and Vercel Blob for CDN delivery.
 
-## Support & Resources
+Can I use this without Supabase?
+Yes. Creations stay local without Supabase. With Supabase, they persist across sessions and devices.
 
-### Official Links
+What if I don't set OpenAI API key?
+Demo endpoints return placeholder images. Set OPENAI_API_KEY to generate real images with DALL-E 3.
 
-- **Story Protocol**: https://docs.story.foundation/
-- **OpenAI API**: https://platform.openai.com/docs
-- **Pinata**: https://docs.pinata.cloud
-- **Privy Docs**: https://docs.privy.io
-- **Viem**: https://viem.sh
-- **Vercel**: https://vercel.com/docs
-- **Netlify**: https://docs.netlify.com
+Is this fully decentralized?
+Partially. UI and generation use centralized services (React, OpenAI), but IP ownership and licensing is fully on-chain via Story Protocol.
 
-### Troubleshooting
+---
 
-| Issue                    | Solution                                               |
-| ------------------------ | ------------------------------------------------------ |
-| Blank page on load       | Check browser console; verify API keys in `.env.local` |
-| "Module not found" error | Run `pnpm install`                                     |
-| Wallet won't connect     | Verify Privy App ID; check EVM network config          |
-| API errors (401/403)     | Check API keys in environment variables                |
-| Images not generating    | Verify OpenAI API key and usage limits                 |
-| IPFS upload fails        | Check Pinata JWT and gateway configuration             |
-| Port 5173 in use         | Kill process: `lsof -ti:5173 \| xargs kill -9`         |
+## Resources
+
+- Story Protocol: https://docs.story.foundation/
+- OpenAI: https://platform.openai.com/docs
+- Supabase: https://supabase.com/docs
+- Privy: https://docs.privy.io
+- Viem: https://viem.sh
+- React Router: https://reactrouter.com/
+- TailwindCSS: https://tailwindcss.com/
+
+---
 
 ## License
 
 © 2025 RadutVerse Contributors
-
----
-
-**RadutVerse**: Tokenizing creativity for the blockchain. 
