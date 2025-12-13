@@ -57,7 +57,7 @@ Opens at http://localhost:5173 with hot reload.
 
 ### Important: Running on Mainnet
 
-his application is configured to run on Story Protocol mainnet for full functionality. Testnet has limitations that make testing and comparing IP registration features difficult. On mainnet, you can register IP, test all license types, and monitor everything through Story Protocol's official tools.
+This application is configured to run on Story Protocol mainnet for full functionality. Testnet has limitations that make testing and comparing IP registration features difficult. On mainnet, you can register IP, test all license types, and monitor everything through Story Protocol's official tools.
 
 Costs are minimal: hundreds of transactions use less than $0.10 of IP tokens. Use a new wallet for testing, not your main one.
 
